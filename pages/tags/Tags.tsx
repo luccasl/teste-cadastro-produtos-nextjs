@@ -13,13 +13,18 @@ const Tags: React.FunctionComponent = () => {
     const [ isRemoveModalEnabled, setIsRemoveModalEnabled ] = useState<boolean>(false)
     const [ removedTag, setRemovedTag ] = useState<Tag>()
     const [ tags, setTags ] = useState<Array<Tag>>([])
+    const [ loading, setLoading ] = useState<boolean>(true)
 
     const router = useRouter()
 
     const fetchTags = async () => {
+        setLoading(true)
+
         const { data } = await api.get('/tags')
 
         setTags(data)
+
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -69,7 +74,7 @@ const Tags: React.FunctionComponent = () => {
 
     return (
         <Container title='Tags'>
-            { tags.length > 0 ?
+            { !loading ?
                 <List
                     renderItem={ renderItem }
                     data={ tags }

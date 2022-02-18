@@ -13,14 +13,19 @@ const Products: React.FunctionComponent = () => {
     const [ isRemoveModalEnabled, setIsRemoveModalEnabled ] = useState<boolean>(false)
     const [ removedProduct, setRemovedProduct ] = useState<Product>()
     const [ products, setProducts ] = useState<Array<Product>>([])
+    const [ loading, setLoading ] = useState<boolean>(true)
 
     const disableRemoveModal = () => setIsRemoveModalEnabled(false)
     const enableRemoveModal = () => setIsRemoveModalEnabled(true)
 
     const fetchProducts = async () => {
+        setLoading(true)
+
         const { data } = await api.get('/products')
 
         setProducts(data)
+
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -76,7 +81,7 @@ const Products: React.FunctionComponent = () => {
 
     return (
         <Container title='Produtos'>
-            { products.length > 0 ?
+            { !loading ?
                 <List
                     renderItem={ renderItem }
                     data={ products }
